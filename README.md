@@ -11,12 +11,6 @@ Junit 5 :
 ```xml
 <dependency>
     <groupId>com.ekino.oss</groupId>
-    <artifactId>wiremock-unused-stubs-junit-core</artifactId>
-    <version>1.0.0</version>
-    <scope>test</scope>
-</dependency>
-<dependency>
-    <groupId>com.ekino.oss</groupId>
     <artifactId>wiremock-unused-stubs-junit-jupiter</artifactId>
     <version>1.0.0</version>
     <scope>test</scope>
@@ -25,12 +19,6 @@ Junit 5 :
 
 Junit 4 :
 ```xml
-<dependency>
-    <groupId>com.ekino.oss</groupId>
-    <artifactId>wiremock-unused-stubs-junit-core</artifactId>
-    <version>1.0.0</version>
-    <scope>test</scope>
-</dependency>
 <dependency>
     <groupId>com.ekino.oss</groupId>
     <artifactId>wiremock-unused-stubs-junit-vintage</artifactId>
@@ -43,13 +31,11 @@ Junit 4 :
 
 Junit 5 :
 ```kotlin
-testImplementation("com.ekino.oss:wiremock-unused-stubs-junit-core:1.0,0")
 testImplementation("com.ekino.oss:wiremock-unused-stubs-junit-jupiter:1.0,0")
 ```
 
 Junit 4 :
 ```kotlin
-testImplementation("com.ekino.oss:wiremock-unused-stubs-junit-core:1.0,0")
 testImplementation("com.ekino.oss:wiremock-unused-stubs-junit-vintage:1.0,0")
 ```
 
