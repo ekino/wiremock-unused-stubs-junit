@@ -2,7 +2,7 @@ import net.researchgate.release.ReleasePlugin
 
 plugins {
     base
-    kotlin("jvm") version "1.5.30" apply false
+    kotlin("jvm") version "1.6.0" apply false
     id("com.ekino.oss.plugin.kotlin-quality") version "3.0.0" apply false
     id("net.researchgate.release") version "2.8.1"
     id("org.jetbrains.dokka") version "1.5.0"
