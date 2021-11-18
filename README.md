@@ -10,7 +10,7 @@ It supports junit4 and junit5 engine.
 Junit 5 :
 ```xml
 <dependency>
-    <groupId>com.ekino.oss</groupId>
+    <groupId>com.ekino.oss.wiremock</groupId>
     <artifactId>wiremock-unused-stubs-junit-jupiter</artifactId>
     <version>1.0.0</version>
     <scope>test</scope>
@@ -20,7 +20,7 @@ Junit 5 :
 Junit 4 :
 ```xml
 <dependency>
-    <groupId>com.ekino.oss</groupId>
+    <groupId>com.ekino.oss.wiremock</groupId>
     <artifactId>wiremock-unused-stubs-junit-vintage</artifactId>
     <version>1.0.0</version>
     <scope>test</scope>
@@ -31,12 +31,12 @@ Junit 4 :
 
 Junit 5 :
 ```kotlin
-testImplementation("com.ekino.oss:wiremock-unused-stubs-junit-jupiter:1.0,0")
+testImplementation("com.ekino.oss.wiremock:wiremock-unused-stubs-junit-jupiter:1.0.0")
 ```
 
 Junit 4 :
 ```kotlin
-testImplementation("com.ekino.oss:wiremock-unused-stubs-junit-vintage:1.0,0")
+testImplementation("com.ekino.oss.wiremock:wiremock-unused-stubs-junit-vintage:1.0.0")
 ```
 
 ## How to use it ?
