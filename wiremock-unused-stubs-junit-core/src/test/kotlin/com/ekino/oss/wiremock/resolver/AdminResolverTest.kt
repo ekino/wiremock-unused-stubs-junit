@@ -1,47 +1,46 @@
-package com.ekino.oss.wiremock.sample
+package com.ekino.oss.wiremock.resolver
 
-import com.ekino.oss.wiremock.WireMockJunit4Extension
+import assertk.assertThat
+import assertk.assertions.hasSize
+import assertk.assertions.isEmpty
+import assertk.assertions.isEqualTo
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import org.apache.hc.client5.http.classic.methods.HttpGet
 import org.apache.hc.client5.http.classic.methods.HttpUriRequest
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder
-import org.junit.After
-import org.junit.Before
-import org.junit.ClassRule
-import org.junit.Test
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-class SampleTestClassSilentOn {
+class AdminResolverTest {
 
-    companion object {
-        val wireMockServer = WireMockServer(1234)
+    private val wireMockServer = WireMockServer(1234)
 
-        @JvmField
-        @ClassRule
-        val wireMockStubExtension = WireMockJunit4Extension(listOf(wireMockServer), silent = true)
-    }
-
-    @Before
+    @BeforeEach
     fun setUp() = wireMockServer.start()
 
-    @After
+    @AfterEach
     fun tearDown() = wireMockServer.stop()
 
     @Test
-    fun someTestWithNoStubsDefined() {
-        // ktlint-disable no-empty-function
+    fun `Should not find any stubs when none is defined`() {
+        assertThat(AdminResolver(wireMockServer).getUnusedStubs()).isEmpty()
     }
 
     @Test
-    fun someTestWithOneStubDefinedButNotUsed() {
+    fun `Should find one unused stub`() {
         wireMockServer.stubFor(
             WireMock.get(WireMock.urlPathEqualTo("/some-url"))
                 .willReturn(WireMock.ok())
         )
+
+        assertThat(AdminResolver(wireMockServer).getUnusedStubs())
+            .hasSize(1)
     }
 
     @Test
-    fun someTestWithOneStubDefinedButUsed() {
+    fun `Should not find any stubs when all stubs are used`() {
         wireMockServer.stubFor(
             WireMock.get(WireMock.urlPathEqualTo("/some-url"))
                 .willReturn(WireMock.ok())
@@ -49,10 +48,12 @@ class SampleTestClassSilentOn {
 
         val request: HttpUriRequest = HttpGet("http://localhost:1234/some-url")
         HttpClientBuilder.create().build().execute(request)
+
+        assertThat(AdminResolver(wireMockServer).getUnusedStubs()).isEmpty()
     }
 
     @Test
-    fun someTestWithMultipleStubsButNotAllUsed() {
+    fun `Should find that one stub is unused among multiple stub`() {
         wireMockServer.stubFor(
             WireMock.get(WireMock.urlPathEqualTo("/some-url"))
                 .willReturn(WireMock.ok())
@@ -65,5 +66,11 @@ class SampleTestClassSilentOn {
 
         val request: HttpUriRequest = HttpGet("http://localhost:1234/some-url")
         HttpClientBuilder.create().build().execute(request)
+
+        assertThat(AdminResolver(wireMockServer).getUnusedStubs())
+            .hasSize(1)
+
+        assertThat(AdminResolver(wireMockServer).getUnusedStubs()[0].request.urlPath)
+            .isEqualTo("/other-url")
     }
 }

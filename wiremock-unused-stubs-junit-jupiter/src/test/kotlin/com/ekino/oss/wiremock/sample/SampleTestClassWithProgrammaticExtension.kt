@@ -1,31 +1,29 @@
 package com.ekino.oss.wiremock.sample
 
-import com.ekino.oss.wiremock.WireMockJunit4Extension
-import com.github.tomakehurst.wiremock.WireMockServer
+import com.ekino.oss.wiremock.WireMockStubExtension
 import com.github.tomakehurst.wiremock.client.WireMock
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
+import com.github.tomakehurst.wiremock.junit5.WireMockExtension
 import org.apache.hc.client5.http.classic.methods.HttpGet
 import org.apache.hc.client5.http.classic.methods.HttpUriRequest
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder
-import org.junit.After
-import org.junit.Before
-import org.junit.ClassRule
-import org.junit.Test
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 
-class SampleTestClassSilentOn {
+class SampleTestClassWithProgrammaticExtension {
 
     companion object {
-        val wireMockServer = WireMockServer(1234)
 
         @JvmField
-        @ClassRule
-        val wireMockStubExtension = WireMockJunit4Extension(listOf(wireMockServer), silent = true)
+        @RegisterExtension
+        val wiremockExtension = WireMockExtension.newInstance()
+            .options(wireMockConfig().port(1234))
+            .build()
+
+        @JvmField
+        @RegisterExtension
+        val wireMockStubExtension = WireMockStubExtension(wireMockRuntimeInfos = listOf(wiremockExtension))
     }
-
-    @Before
-    fun setUp() = wireMockServer.start()
-
-    @After
-    fun tearDown() = wireMockServer.stop()
 
     @Test
     fun someTestWithNoStubsDefined() {
@@ -34,7 +32,7 @@ class SampleTestClassSilentOn {
 
     @Test
     fun someTestWithOneStubDefinedButNotUsed() {
-        wireMockServer.stubFor(
+        wiremockExtension.stubFor(
             WireMock.get(WireMock.urlPathEqualTo("/some-url"))
                 .willReturn(WireMock.ok())
         )
@@ -42,7 +40,7 @@ class SampleTestClassSilentOn {
 
     @Test
     fun someTestWithOneStubDefinedButUsed() {
-        wireMockServer.stubFor(
+        wiremockExtension.stubFor(
             WireMock.get(WireMock.urlPathEqualTo("/some-url"))
                 .willReturn(WireMock.ok())
         )
@@ -53,12 +51,12 @@ class SampleTestClassSilentOn {
 
     @Test
     fun someTestWithMultipleStubsButNotAllUsed() {
-        wireMockServer.stubFor(
+        wiremockExtension.stubFor(
             WireMock.get(WireMock.urlPathEqualTo("/some-url"))
                 .willReturn(WireMock.ok())
         )
 
-        wireMockServer.stubFor(
+        wiremockExtension.stubFor(
             WireMock.get(WireMock.urlPathEqualTo("/other-url"))
                 .willReturn(WireMock.ok())
         )

@@ -3,9 +3,9 @@ package com.ekino.oss.wiremock.sample
 import com.ekino.oss.wiremock.WireMockJunit4Extension
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
-import org.apache.http.client.methods.HttpGet
-import org.apache.http.client.methods.HttpUriRequest
-import org.apache.http.impl.client.HttpClientBuilder
+import org.apache.hc.client5.http.classic.methods.HttpGet
+import org.apache.hc.client5.http.classic.methods.HttpUriRequest
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder
 import org.junit.After
 import org.junit.Before
 import org.junit.ClassRule

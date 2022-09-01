@@ -68,12 +68,11 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     implementation("org.junit.jupiter:junit-jupiter-engine:${project.extra["junit5.version"]}")
-    implementation("com.github.tomakehurst:wiremock:2.27.2")
+    implementation("com.github.tomakehurst:wiremock-jre8:${project.extra["wiremock.version"]}")
 
     testImplementation("org.junit.platform:junit-platform-testkit:1.9.0")
     testImplementation("org.junit.jupiter:junit-jupiter-params:${project.extra["junit5.version"]}")
 
-    testImplementation("com.github.tomakehurst:wiremock:${project.extra["wiremock.version"]}")
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:${project.extra["assertk.version"]}")
     testImplementation("uk.org.lidalia:slf4j-test:1.2.0")
 

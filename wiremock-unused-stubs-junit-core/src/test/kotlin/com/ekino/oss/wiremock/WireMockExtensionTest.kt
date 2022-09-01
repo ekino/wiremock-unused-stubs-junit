@@ -3,21 +3,19 @@ package com.ekino.oss.wiremock
 import assertk.assertThat
 import assertk.assertions.each
 import assertk.assertions.hasMessage
-import assertk.assertions.hasSize
-import assertk.assertions.isEmpty
 import assertk.assertions.isEqualTo
 import assertk.assertions.isFailure
 import assertk.assertions.isInstanceOf
 import assertk.assertions.prop
 import com.ekino.oss.wiremock.WireMockExtension.displayMessage
-import com.ekino.oss.wiremock.WireMockExtension.getUnusedStubs
+import com.ekino.oss.wiremock.resolver.AdminResolver
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.ok
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
-import org.apache.http.client.methods.HttpGet
-import org.apache.http.client.methods.HttpUriRequest
-import org.apache.http.impl.client.HttpClientBuilder
+import org.apache.hc.client5.http.classic.methods.HttpGet
+import org.apache.hc.client5.http.classic.methods.HttpUriRequest
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -37,57 +35,6 @@ class WireMockExtensionTest {
     fun tearDown() = wireMockServer.stop()
 
     @Test
-    fun `Should not find any stubs when none is defined`() {
-        assertThat(wireMockServer.getUnusedStubs()).isEmpty()
-    }
-
-    @Test
-    fun `Should find one unused stub`() {
-        wireMockServer.stubFor(
-            get(urlPathEqualTo("/some-url"))
-                .willReturn(ok())
-        )
-
-        assertThat(wireMockServer.getUnusedStubs())
-            .hasSize(1)
-    }
-
-    @Test
-    fun `Should not find any stubs when all stubs are used`() {
-        wireMockServer.stubFor(
-            get(urlPathEqualTo("/some-url"))
-                .willReturn(ok())
-        )
-
-        val request: HttpUriRequest = HttpGet("http://localhost:1234/some-url")
-        HttpClientBuilder.create().build().execute(request)
-
-        assertThat(wireMockServer.getUnusedStubs()).isEmpty()
-    }
-
-    @Test
-    fun `Should find that one stub is unused among multiple stub`() {
-        wireMockServer.stubFor(
-            get(urlPathEqualTo("/some-url"))
-                .willReturn(ok())
-        )
-
-        wireMockServer.stubFor(
-            get(urlPathEqualTo("/other-url"))
-                .willReturn(ok())
-        )
-
-        val request: HttpUriRequest = HttpGet("http://localhost:1234/some-url")
-        HttpClientBuilder.create().build().execute(request)
-
-        assertThat(wireMockServer.getUnusedStubs())
-            .hasSize(1)
-
-        assertThat(wireMockServer.getUnusedStubs()[0].request.urlPath)
-            .isEqualTo("/other-url")
-    }
-
-    @Test
     fun `Should not get any error message all stubs are used`() {
         wireMockServer.stubFor(
             get(urlPathEqualTo("/some-url"))
@@ -97,7 +44,7 @@ class WireMockExtensionTest {
         val request: HttpUriRequest = HttpGet("http://localhost:1234/some-url")
         HttpClientBuilder.create().build().execute(request)
 
-        assertDoesNotThrow { wireMockServer.getUnusedStubs().displayMessage() }
+        assertDoesNotThrow { AdminResolver(wireMockServer).getUnusedStubs().displayMessage() }
     }
 
     @Test
@@ -118,7 +65,7 @@ class WireMockExtensionTest {
         )
 
         assertThat {
-            wireMockServer.getUnusedStubs().displayMessage()
+            AdminResolver(wireMockServer).getUnusedStubs().displayMessage()
         }.isFailure().isInstanceOf(AssertionError::class).hasMessage(expectedMessage)
     }
 
@@ -141,7 +88,7 @@ class WireMockExtensionTest {
                 .willReturn(ok())
         )
 
-        assertDoesNotThrow { wireMockServer.getUnusedStubs().displayMessage(true) }
+        assertDoesNotThrow { AdminResolver(wireMockServer).getUnusedStubs().displayMessage(true) }
         assertThat(logger.allLoggingEvents)
             .each { assert ->
                 run {

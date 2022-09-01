@@ -1,6 +1,5 @@
 package com.ekino.oss.wiremock
 
-import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.matching.MultiValuePattern
 import com.github.tomakehurst.wiremock.matching.RequestPattern
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
@@ -10,27 +9,12 @@ private val logger = KotlinLogging.logger {}
 
 object WireMockExtension {
 
-    fun WireMockServer.getUnusedStubs(): List<StubMapping> {
-        val usedStubIds = this.getUsedStubId()
-
-        return this
-            .listAllStubMappings()
-            .mappings
-            .filter { !usedStubIds.contains(it.id) }
-            .toList()
-    }
-
     fun List<StubMapping>.displayMessage(silent: Boolean = false) {
         if (this.isNotEmpty()) {
             val message = this.joinToString("\n") { it.displayInfo() }
             if (silent) displayWarningMessage(message) else displayErrorMessage(message)
         }
     }
-
-    private fun WireMockServer.getUsedStubId() = this.serveEvents
-        .requests
-        .mapNotNull { it.stubMapping?.id }
-        .toSet()
 
     private fun StubMapping.displayInfo() = """
         Unnecessary wiremock stub has been found :
@@ -50,7 +34,9 @@ object WireMockExtension {
         this.urlMatcher.pattern.toString()
     ).first()
 
-    private fun prettyHeader(headers: Map<String, MultiValuePattern>) = headers.entries.map { "${it.key} ${it.value.valuePattern}" }
+    private fun prettyHeader(headers: Map<String, MultiValuePattern>) =
+        headers.entries.map { "${it.key} ${it.value.valuePattern}" }
+
     private fun displayErrorMessage(message: String): Unit = throw AssertionError(message)
     private fun displayWarningMessage(message: String): Unit = logger.warn(message)
 }
