@@ -70,7 +70,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    implementation("com.github.tomakehurst:wiremock:${project.extra["wiremock.version"]}")
+    implementation("com.github.tomakehurst:wiremock-jre8:${project.extra["wiremock.version"]}")
     implementation("io.github.microutils:kotlin-logging:2.1.23")
 
     testImplementation("org.junit.jupiter:junit-jupiter-engine:${project.extra["junit5.version"]}")

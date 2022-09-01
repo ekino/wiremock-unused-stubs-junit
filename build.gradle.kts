@@ -15,9 +15,9 @@ allprojects {
         mavenCentral()
     }
 
-    project.extra.set("junit5.version", "5.7.2")
-    project.extra.set("wiremock.version", "2.27.2")
-    project.extra.set("assertk.version", "0.24")
+    project.extra.set("junit5.version", "5.9.0")
+    project.extra.set("wiremock.version", "2.33.2")
+    project.extra.set("assertk.version", "0.25")
 }
 
 tasks.create("printVersion") {

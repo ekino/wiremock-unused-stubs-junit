@@ -1,7 +1,7 @@
 package com.ekino.oss.wiremock
 
 import com.ekino.oss.wiremock.WireMockExtension.displayMessage
-import com.ekino.oss.wiremock.WireMockExtension.getUnusedStubs
+import com.ekino.oss.wiremock.resolver.AdminResolver
 import com.github.tomakehurst.wiremock.WireMockServer
 import org.junit.rules.ExternalResource
 
@@ -11,8 +11,11 @@ class WireMockJunit4Extension(
 ) : ExternalResource() {
 
     override fun after() {
-        servers.forEach {
-            it.getUnusedStubs().displayMessage(silent)
-        }
+
+        servers
+            .map { AdminResolver(it) }
+            .forEach {
+                it.getUnusedStubs().displayMessage(silent)
+            }
     }
 }
