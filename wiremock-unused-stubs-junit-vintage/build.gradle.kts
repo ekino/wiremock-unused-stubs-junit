@@ -76,7 +76,7 @@ dependencies {
     implementation("junit:junit:4.13.2")
     implementation("com.github.tomakehurst:wiremock-jre8:${project.extra["wiremock.version"]}")
 
-    testImplementation("org.junit.platform:junit-platform-testkit:1.9.1")
+    testImplementation("org.junit.platform:junit-platform-testkit:1.9.2")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:${project.extra["junit5.version"]}")
     testImplementation("org.junit.vintage:junit-vintage-engine:${project.extra["junit5.version"]}")
     testImplementation("org.junit.jupiter:junit-jupiter-params:${project.extra["junit5.version"]}")
