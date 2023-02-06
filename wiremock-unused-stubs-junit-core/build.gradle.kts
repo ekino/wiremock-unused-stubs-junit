@@ -71,7 +71,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     implementation("com.github.tomakehurst:wiremock-jre8:${project.extra["wiremock.version"]}")
-    implementation("io.github.microutils:kotlin-logging:3.0.4")
+    implementation("io.github.microutils:kotlin-logging:3.0.5")
 
     testImplementation("org.junit.jupiter:junit-jupiter-engine:${project.extra["junit5.version"]}")
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:${project.extra["assertk.version"]}")
