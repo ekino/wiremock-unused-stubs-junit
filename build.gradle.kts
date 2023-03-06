@@ -5,7 +5,7 @@ plugins {
     kotlin("jvm") version "1.7.22" apply false
     id("com.ekino.oss.plugin.kotlin-quality") version "3.3.0" apply false
     id("net.researchgate.release") version "3.0.2"
-    id("org.jetbrains.dokka") version "1.7.20"
+    id("org.jetbrains.dokka") version "1.8.10"
 }
 
 allprojects {
